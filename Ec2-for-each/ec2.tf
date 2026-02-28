@@ -1,16 +1,17 @@
 
 resource "aws_instance" "test" {
+  for_each = var.instance_type 
   ami           = "ami-0220d79f3f480ecf5"
-  instance_type = "t3.micro"
+  instance_type = each.value
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   tags = {
-    Name = "Devops"
+    Name = each.key
   }
 }
 
 
 resource "aws_security_group" "allow_tls" {
-  name        = "allow_tls"
+  name        = "allow_tls_foreach"
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = var.vpc
 
@@ -30,6 +31,7 @@ resource "aws_security_group" "allow_tls" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 }
+
 
 
 

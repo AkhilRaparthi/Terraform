@@ -1,11 +1,9 @@
 
 resource "aws_instance" "test" {
-  ami           = "ami-0220d79f3f480ecf5"
-  instance_type = "t3.micro"
+  ami           = local.ami
+  instance_type = local.type
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
-  tags = {
-    Name = "Devops"
-  }
+  tags = local.ec2_tags
 }
 
 
@@ -14,9 +12,7 @@ resource "aws_security_group" "allow_tls" {
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = var.vpc
 
-  tags = {
-    Name = "allow_tls"
-  }
+  tags = local.tags
   ingress {
     from_port        = 0
     to_port          = 0
